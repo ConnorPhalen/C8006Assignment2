@@ -1,11 +1,8 @@
 #!/bin/sh
 #-------------
-# iptable_gen.sh
-# Script made by Connor Phalen
-# January 17, 2019: Added tcp and udp port rule additions through user chain tcpin
-# January 22, 2019: Added some OUTPUT rules
-# January 23, 2019: Added port 443 for SSL traffic and SYN restrictions
-# January 24, 2019: Testing and general checks
+# forward_gen.sh
+# Script made by Connor Phalen abd Greg Little
+# January 31, 2019: Setup varibales and User Chains
 #-------------
 
 #Varibale Section
@@ -22,6 +19,7 @@ ADPT_IP="0.0.0.0" # Test variable for getting Adapter IP's later
 #Backups to flush and delete user chains in case they already exist
 iptables -F INPUT
 iptables -F OUTPUT
+iptables -F FORWARD
 iptables -F tcpfwd_in
 iptables -X tcpfwd_in
 iptables -F udpfwd_in
@@ -45,6 +43,8 @@ IFS=";" read -r -a PORT_ARRAY <<< "$APPROVED_PORTS" #Create an array of ports
 iptables -P INPUT DROP #Set Default Input to Drop all packets
 iptables -P OUTPUT DROP #Set Default Output to Drop all packets
 iptables -P FORWARD DROP #Set Default Output to Drop all packets
+
+iptables -A FORWARD -s "$IIP" -j ACCEPT
 
 # Initial prototype
 #for i in "${PORT_ARRAY[@]}"; do #Accept tcp conn for ports destined to the lab
