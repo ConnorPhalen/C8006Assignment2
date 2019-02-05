@@ -16,27 +16,13 @@ ADPT_IP="0.0.0.0" # Test variable for getting Adapter IP's later
 # 80 - http (tcp)
 # 443- SSL (tcp)
 
+#Allow For this machine to be a TEMP Forwarding machine, has to be rerun every restart
+sysctl -w net.ipv4.ip_forward=1
+
 #Backups to flush and delete user chains in case they already exist
 iptables -F INPUT
 iptables -F OUTPUT
 iptables -F FORWARD
-iptables -F tcpfwd_in
-iptables -X tcpfwd_in
-iptables -F udpfwd_in
-iptables -X udpfwd_in
-iptables -F tcpfwd_out
-iptables -X tcpfwd_out
-iptables -F udpfwd_out
-iptables -X udpfwd_out
-iptables -F servconn_fwd
-iptables -X servconn_fwd
-
-#Make user-defined chains
-iptables -N tcpfwd_in
-iptables -N udpfwd_in
-iptables -N tcpfwd_out
-iptables -N udpfwd_out
-iptables -N servconn_fwd
 
 IFS=";" read -r -a PORT_ARRAY <<< "$APPROVED_PORTS" #Create an array of ports
 
@@ -44,9 +30,3 @@ iptables -P INPUT DROP #Set Default Input to Drop all packets
 iptables -P OUTPUT DROP #Set Default Output to Drop all packets
 iptables -P FORWARD DROP #Set Default Output to Drop all packets
 
-iptables -A FORWARD -s "$IIP" -j ACCEPT
-
-# Initial prototype
-#for i in "${PORT_ARRAY[@]}"; do #Accept tcp conn for ports destined to the lab
-#    iptables -A tcpin -p tcp -d 192.168.1.0/24 --sport $i -j ACCEPT
-#done

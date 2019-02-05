@@ -19,6 +19,10 @@
 # nmcli dev disconnect wlp3s0
 # nmcli dev connect wlp3s0
 
+# BETTER ALTERNATIVE Disable/ Enable network adapter. use "nmcli dev" to see list of devices
+# nmcli connection down ifname wlp3s0
+# nmcli connection up ifname wlp3s0
+
 # -------- Possible God Tier Extension Stuff ---------- Ignore for now
 # Execute firewall_setup.sh -> Sets firewall rules for Forwarding
 # SSH into inner comp, execute inner_setup.sh -> Disables adpt and sets firewall rules
@@ -30,22 +34,34 @@
 # -------- User Config Section -------- #
 # Simply modify the names of these adapters to suit needs
 
-FIREWALL_ADPT_EXT="wlp3s0" 	# Exterior Facing Firewall
-FIREWALL_ADPT_INT="eth1" 	# Exterior Facing Firewall
-INNER_ADPT="eth0" 			# Interior Isolated Machine
+FIREWALL_ADPT_EXT="eno1" 		# Exterior Facing Firewall
+FIREWALL_ADPT_INT="enp3s2" 		# Exterior Facing Firewall
+INNER_ADPT="enp3s2" 			# Interior Isolated Machine
+INNER_SUB_IP="192.168.10.2"		# Inner Computer IP on Station #2
+FIREWALL_SUB_IP="192.168.10.1"	# Firewall Computer IP on Station #1
+FIREWALL_HOST_IP="192.168.0.1"	# Firewall's Default IP
 
 # -------- End User Config Section -------- #
 
 
 # ---- Variable Setup Section ---- #
-FIREWALL_IP_EXT="$(ifconfig "$FIREWALL_ADPT_EXT" | grep "inet " | awk -F'[: ]+' '{ print $3 }')"
-FIREWALL_IP_INT="0.0.0.0"
-INNER_IP="192.0.2.100" 
 
-echo "$FIREWALL_IP_EXT"
 
+
+
+#FIREWALL_IP_EXT="$(ifconfig "$FIREWALL_ADPT_EXT" | grep "inet " | awk -F'[: ]+' '{ print $3 }')"
+#FIREWALL_IP_INT="0.0.0.0"
+#INNER_IP="192.168.0.11" 
+
+#echo "$FIREWALL_IP_EXT"
 
 # ---- Export and Script Execution Section ---- #
-export IIP="$INNER_IP" # Export variable for use in the next scripts, alt: source next scripts to use the variables
+#export IIP="$INNER_IP" # Export variable for use in the next scripts, alt: source next scripts to use the variables
 
-.forward_gen.sh # Execute next script
+export FAE="$FIREWALL_ADPT_EXT"
+export FAI="$FIREWALL_ADPT_INT"
+export IA="$INNER_ADPT"
+export FSI="$FIREWALL_SUB_IP"
+export FHI="$FIREWALL_HOST_IP"
+
+./forward_gen.sh # Execute next script
