@@ -43,6 +43,8 @@ iptables -A FORWARD -p tcp --dport 515 -j DROP
 iptables -A FORWARD -p udp --dport 32768:32775 -j DROP
 iptables -A FORWARD -p udp --dport 137:139 -j DROP
 
+iptables -A FORWARD -s 192.168.10.0/24 -j DROP # drop subnet traffic - Still seems liek it might drop desired traffic -
+
 # chain rules
 
 # drop anything from port 23
