@@ -40,5 +40,3 @@ IFS=";" read -r -a PORT_ARRAY <<< "$APPROVED_PORTS" #Create an array of ports
 iptables -P INPUT DROP #Set Default Input to Drop all packets
 iptables -P OUTPUT DROP #Set Default Output to Drop all packets
 iptables -P FORWARD DROP #Set Default Forward to drop packets
-
-iptables -A INPUT -s 192.168.10.0/24 -j DROP # drop subnet traffic yyyyyyyyyyy
