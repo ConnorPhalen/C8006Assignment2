@@ -25,8 +25,9 @@ DNS_NAMESERVER="142.232.76.191"	# DNS Server
 
 
 # ---- Variable Setup Section ---- #
-APPROVED_TCP="20;21;22;80;443"  #Approved ports for TCP Ports
-APPROVED_UDP="53;67;68"         #Approved ports for UDP Ports
+APRROVED_SERVICES="20;21;22"    #Approved Services (mainly data Services)
+APPROVED_TCP_PORTS="80;443"     #Approved ports for TCP Ports
+APPROVED_UDP_PORTS="53"         #Approved ports for UDP Ports
 APPROVED_ICMP="0;3;4;8;11"      #Approved ports for ICMP Types
 
 DENIED_TCP="23;111;515;137;139;1024;32768;32775;65535" # Specific Denied Ports
@@ -69,10 +70,11 @@ export FHI="$FIREWALL_HOST_IP"
 export ISI="$INNER_SUB_IP"
 export FM="$FIREWALL_MASK"
 export FBS="$FIREWALL_BASE_SUB"
-export APPROVED_TCP="$APPROVED_TCP"
-export APPROVED_UDP="$APPROVED_UDP"
+export APRROVED_SERVICES="$APRROVED_SERVICES"
+export APPROVED_TCP_PORTS="$APPROVED_TCP_PORTS"
+export APPROVED_UDP_PORTS="$APPROVED_UDP_PORTS"
 export APPROVED_ICMP="$APPROVED_ICMP"
 export DNS_NAMESERVER="$DNS"
 
-./forward_gen.sh   # Execute Firewall script
+#./forward_gen.sh   # Execute Firewall script
 #./inner_gen.sh     # Execute Inner Computer script
