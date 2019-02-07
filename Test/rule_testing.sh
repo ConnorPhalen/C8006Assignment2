@@ -20,8 +20,7 @@ max="${TEST_RANGE[1]}"
 
 while [ $min -le $max ] 
 do 
-	#hping3 -destport "$min"
-	echo "$min"
+	hping3 "$FIP" -p "$min" -c 2
 	((min++)) # Increment min
 done
 
