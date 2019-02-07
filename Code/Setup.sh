@@ -5,30 +5,7 @@
 # February 1. 2019: Setup config variables and adapter information
 #-------------
 
-# ---- Notes ----
-# Prints off the IP of this specific adapter
-# ifconfig wlp3s0 | grep "inet " | awk -F'[: ]+' '{ print $3 }'
-
-# prints off active adapter IP's, top one should be most active????
-# route | grep "192.168." | awk -F'[: ]+' '{ print $1 }'
-
-# Gets the adapters that the above IP's use
-# route | grep "192.168." | awk -F'[: ]+' '{ print $8 }'
-
-# Disable/ Enable network adapter. use "nmcli dev" to see list of devices
-# nmcli dev disconnect wlp3s0
-# nmcli dev connect wlp3s0
-
-# BETTER ALTERNATIVE Disable/ Enable network adapter. use "nmcli dev" to see list of devices
-# nmcli connection down ifname wlp3s0
-# nmcli connection up ifname wlp3s0
-
-# -------- Possible God Tier Extension Stuff ---------- Ignore for now
-# Execute firewall_setup.sh -> Sets firewall rules for Forwarding
-# SSH into inner comp, execute inner_setup.sh -> Disables adpt and sets firewall rules
-# When done, execute, inner_revert.sh -> SSH into inner comp to revert firewall and adapter changes
-# Then run firewall_revert.sh -> Reverts firewall computer back to normal.
-
+# ---- Notes ---- #
 
 
 # -------- User Config Section -------- #
@@ -97,5 +74,5 @@ export APPROVED_UDP="$APPROVED_UDP"
 export APPROVED_ICMP="$APPROVED_ICMP"
 export DNS_NAMESERVER="$DNS"
 
-#./forward_gen.sh   # Execute Firewall script
+./forward_gen.sh   # Execute Firewall script
 #./inner_gen.sh     # Execute Inner Computer script
