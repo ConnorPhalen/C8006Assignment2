@@ -39,8 +39,10 @@ FIREWALL_ADPT_INT="enp3s2" 		# Exterior Facing Firewall
 INNER_ADPT="enp3s2" 			# Interior Isolated Machine
 INNER_SUB_IP="192.168.10.2"		# Inner Computer IP on Station #2
 FIREWALL_SUB_IP="192.168.10.1"	# Firewall Computer IP on Station #1
+FIREWALL_BASE_SUB="192.168.10.0" # Firewall Computer Base Subnet
 FIREWALL_HOST_IP="192.168.0.1"	# Firewall's Default IP
-FIREWALL_MASK="24"              # Firewall Mask????
+FIREWALL_MASK="255.255.255.0"   # Firewall Mask
+DNS_NAMESERVER="142.232.76.191"	# DNS Server
 
 # -------- End User Config Section -------- #
 
@@ -50,8 +52,10 @@ APPROVED_TCP="20;21;22;80;443"  #Approved ports for TCP Ports
 APPROVED_UDP="53;67;68"         #Approved ports for UDP Ports
 APPROVED_ICMP="0;3;4;8;11"      #Approved ports for ICMP Types
 
-DENIED_TCP="23;111;515;137;139;32768;32775;1024;65535" # Specific Denied Ports
+DENIED_TCP="23;111;515;137;139;1024;32768;32775;65535" # Specific Denied Ports
 DENIED_UDP="23"
+
+#IFS=";" read -r -a PORT_ARRAY <<< "$APPROVED_PORTS" #Create an array of ports
 
 #Port Breakdown
 # 20 - FTP (tcp)
@@ -85,9 +89,13 @@ export FAI="$FIREWALL_ADPT_INT"
 export IA="$INNER_ADPT"
 export FSI="$FIREWALL_SUB_IP"
 export FHI="$FIREWALL_HOST_IP"
+export ISI="$INNER_SUB_IP"
+export FM="$FIREWALL_MASK"
+export FBS="$FIREWALL_BASE_SUB"
 export APPROVED_TCP="$APPROVED_TCP"
 export APPROVED_UDP="$APPROVED_UDP"
 export APPROVED_ICMP="$APPROVED_ICMP"
+export DNS_NAMESERVER="$DNS"
 
 #./forward_gen.sh   # Execute Firewall script
 #./inner_gen.sh     # Execute Inner Computer script

@@ -9,13 +9,21 @@
 
 #Variable Section
 #IFS=";" read -r -a PORT_ARRAY <<< "$APPROVED_PORTS" #Create an array of ports
+BASE_IP="192.168.0.0"
 
 # Initialization Section
-# setting up
-ifconfig enp3s2 192.168.10.1 up
+	# setting up hardcoded
+#ifconfig enp3s2 192.168.10.1 up
+#echo "1" > /proc/sys/net/ipv4/ip_forward
+#route add -net 192.168.0.0 netmask 255.255.255.0 gw 192.168.0.1
+#route add -net 192.168.10.0/24 gw 192.168.10.1
+
+
+# SETUP WITH EXPORTED VALUES
+ifconfig "$FAI" "$FSI" up
 echo "1" > /proc/sys/net/ipv4/ip_forward
-route add -net 192.168.0.0 netmask 255.255.255.0 gw 192.168.0.1
-route add -net 192.168.10.0/24 gw 192.168.10.1
+route add -net "$BASE_IP" netmask "$FM" gw "$FHI"
+route add -net "$FSB"/24 gw "$FSI"
 
 # pre and post routing
 # makes everything aming for the firewall to go to internal device
@@ -54,8 +62,6 @@ iptables -A FORWARD -p tcp --dport 23 -j DROP
 iptables -A FORWARD -p udp --sport 23 -j DROP
 iptables -A FORWARD -p udp --dport 23 -j DROP
 
-#iptables -A FORWARD -s 192.168.10.0/24 -j DROP # drop subnet traffic -> Put onto inner comp
-
 # drop all traffic with a syn and fin bit set
 iptables -A FORWARD -p tcp --tcp-flags ALL SYN,FIN -j DROP # output syn fin not needed
 
@@ -63,9 +69,19 @@ iptables -A FORWARD -p tcp -mstate --state ESTABLISHED -j ACCEPT # need to have 
 
 iptables -A FORWARD -p tcp --tcp-flags ALL SYN --dport 1024:65535 -j DROP
 
-iptables -A FORWARD -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 20 -j TOS --set-tos 0x08 #FTPD
-iptables -A FORWARD -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 21 -j TOS --set-tos 0x10 #FTP
-iptables -A FORWARD -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 22 -j TOS --set-tos 0x10 #SSH
+iptables -A PREROUTING -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 20 -j TOS --set-tos 0x08 #FTPD
+iptables -A PREROUTING -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 21 -j TOS --set-tos 0x10 #FTP
+iptables -A PREROUTING -t mangle -p tcp -mstate --state NEW,ESTABLISHED --dport 22 -j TOS --set-tos 0x10 #SSH
 iptables -A FORWARD -p tcp -mstate --state NEW,ESTABLISHED --sport 22 --dport 22 -j ACCEPT
 
 iptables -A FORWARD -p udp -f -j ACCEPT # needs more work add to each accepted udp and user chain
+
+
+#How the Script Progresses
+# ---- Block Ranges ---- #
+
+# ---- Specific Ports ---- #
+
+# ---- TCP Flags ---- #
+
+# ---- Stateful Area ---- #

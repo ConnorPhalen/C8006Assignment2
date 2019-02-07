@@ -10,15 +10,20 @@
 #Varibale Section
 #APPROVED_PORTS="20;21;22;53;67;68;80;443" # In Setup.sh
 
-# Setup the connection details
-# REPLACE THESE VALUES WITH THE EXPORTED ONES
-ifconfig eno1 down                          # Disable the internet connected device
-ifconfig enp3s2 down                        # Disable the Firewall connection device
-ifconfig ifconfig enp3s2 192.168.10.2 up    # Setup the Inner IP connection to the device
-route add default gw 192.168.10.1           # Setup the default routing gateway to be the Firewall
+    # HARDCODED Setup the connection details
+#ifconfig eno1 down                          # Disable the internet connected device
+#ifconfig enp3s2 down                        # Disable the Firewall connection device
+#ifconfig ifconfig enp3s2 192.168.10.2 up    # Setup the Inner IP connection to the device
+#route add default gw 192.168.10.1           # Setup the default routing gateway to be the Firewall
+
+# WITH EXPORTED VALUES - Setup the connection details
+ifconfig "$FAE" down                       # Disable the internet connected device
+ifconfig "$IA" down                        # Disable the Firewall connection device
+ifconfig ifconfig "$IA" "$ISI" up    # Setup the Inner IP connection to the device
+route add default gw "$FSI"         # Setup the default routing gateway to be the Firewall
 
 # Echo the nameserver to the resolv.conf file, as it flushes every so often
-echo "nameserver 142.232.76.191" > /etc/resolv.conf  # Set the name server to be the name server
+echo "nameserver $DNS" > /etc/resolv.conf  # Set the name server to be the name server
 
 
 #Port Breakdown
